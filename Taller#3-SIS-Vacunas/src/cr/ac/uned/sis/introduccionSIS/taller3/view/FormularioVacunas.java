@@ -4,6 +4,9 @@
  */
 package cr.ac.uned.sis.introduccionSIS.taller3.view;
 
+import cr.ac.uned.sis.introduccionSIS.taller3.dao.VacunaDAO;
+import cr.ac.uned.sis.introduccionSIS.taller3.dominio.Vacuna;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,6 +33,18 @@ public class FormularioVacunas extends javax.swing.JFrame {
         modeloTabla.addColumn("Fabricante");
 
         // TODO: llenar la tabla usando dao.listar()
+        VacunaDAO vacunaDao =new VacunaDAO();
+        ArrayList<Vacuna> lista = vacunaDao.listar();
+        
+        for (Vacuna v : lista) {
+            Object[] fila = {
+                v.getCodigo(),
+                v.getNombre(),
+                v.getDosis(),
+                v.getFabricante()
+            };
+            modeloTabla.addRow(fila);
+        }
 
         jTableVacunas.setModel(modeloTabla);
     }

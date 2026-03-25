@@ -89,7 +89,14 @@ public class VacunaDAO {
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            // TODO: recorrer ResultSet y llenar lista
+            while (rs.next()) {
+                Vacuna v = new Vacuna();
+                v.setCodigo(rs.getInt("CODIGO"));
+                v.setNombre(rs.getString("NOMBRE"));
+                v.setDosis(rs.getInt("DOSIS"));
+                v.setFabricante(rs.getString("FABRICANTE"));
+                lista.add(v);
+            }
 
         } catch (Exception e) {
             System.out.println("Error listar: " + e.getMessage());
