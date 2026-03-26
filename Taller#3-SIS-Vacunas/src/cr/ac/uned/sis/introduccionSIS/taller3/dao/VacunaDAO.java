@@ -24,7 +24,10 @@ public class VacunaDAO {
             con = cx.getConexion();
             ps = con.prepareStatement(sql);
 
-            // TODO: completar parámetros
+            ps.setInt(1, v.getCodigo());
+            ps.setString(2, v.getNombre());
+            ps.setInt(3, v.getDosis());
+            ps.setString(4, v.getFabricante());
 
             ps.executeUpdate();
             return true;
@@ -42,7 +45,13 @@ public class VacunaDAO {
             ps = con.prepareStatement(sql);
 
             // TODO: asignar parámetro y construir objeto si existe
-
+            ps.setInt(1, codigo);
+            ResultSet rs= ps.executeQuery();
+            if(rs.next()){
+                v=new Vacuna();
+                v.setCodigo(rs.getInt("CODIGO"));
+            }
+            
         } catch (Exception e) {
             System.out.println("Error buscar: " + e.getMessage());
         }
@@ -56,6 +65,10 @@ public class VacunaDAO {
             ps = con.prepareStatement(sql);
 
             // TODO: completar parámetros
+            ps.setInt(1, v.getCodigo());
+            ps.setString(2, v.getNombre());
+            ps.setInt(3, v.getDosis());
+            ps.setString(4, v.getFabricante());
 
             ps.executeUpdate();
             return true;
@@ -72,6 +85,8 @@ public class VacunaDAO {
             ps = con.prepareStatement(sql);
 
             // TODO: completar parámetro
+            ps.setInt(1, codigo);
+            
 
             ps.executeUpdate();
             return true;

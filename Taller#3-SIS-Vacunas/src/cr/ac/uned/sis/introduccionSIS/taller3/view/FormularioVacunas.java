@@ -7,6 +7,7 @@ package cr.ac.uned.sis.introduccionSIS.taller3.view;
 import cr.ac.uned.sis.introduccionSIS.taller3.dao.VacunaDAO;
 import cr.ac.uned.sis.introduccionSIS.taller3.dominio.Vacuna;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -92,18 +93,23 @@ public class FormularioVacunas extends javax.swing.JFrame {
 
         jButtonGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cr/ac/uned/sis/introduccionSIS/taller3/iconos/floppy-icon.png"))); // NOI18N
         jButtonGuardar.setText("Guardar");
+        jButtonGuardar.addActionListener(this::jButtonGuardarActionPerformed);
 
         jButtonBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cr/ac/uned/sis/introduccionSIS/taller3/iconos/search-icon.png"))); // NOI18N
         jButtonBuscar.setText("Buscar");
+        jButtonBuscar.addActionListener(this::jButtonBuscarActionPerformed);
 
         jButtonActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cr/ac/uned/sis/introduccionSIS/taller3/iconos/Pencil-2-icon.png"))); // NOI18N
         jButtonActualizar.setText("Actualizar");
+        jButtonActualizar.addActionListener(this::jButtonActualizarActionPerformed);
 
         jButtonEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cr/ac/uned/sis/introduccionSIS/taller3/iconos/Close-icon.png"))); // NOI18N
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(this::jButtonEliminarActionPerformed);
 
         jButtonLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cr/ac/uned/sis/introduccionSIS/taller3/iconos/New-file-icon.png"))); // NOI18N
         jButtonLimpiar.setText("Limpiar");
+        jButtonLimpiar.addActionListener(this::jButtonLimpiarActionPerformed);
 
         jTableVacunas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -193,6 +199,72 @@ public class FormularioVacunas extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
+        // TODO add your handling code here:
+      Vacuna vacunaNueva=new Vacuna();
+      vacunaNueva.setCodigo(Integer.parseInt(jTextFieldCodigo.getText()));
+      vacunaNueva.setNombre(jTextFieldNombre.getText());
+      vacunaNueva.setDosis(Integer.parseInt(jTextFieldDosis.getText()));
+      vacunaNueva.setFabricante(jTextFieldFabricante.getText());
+      
+      if(vacunaNueva.getCodigo()==0 || vacunaNueva.getNombre().isEmpty()|| vacunaNueva.getDosis()==0 || vacunaNueva.getFabricante().isEmpty()){
+          JOptionPane.showMessageDialog(this, "Es necesario llenar todos los campos del formulario con valores validos", "Error", JOptionPane.ERROR_MESSAGE);
+      }else{
+          VacunaDAO vacunaDAO=new VacunaDAO();
+          vacunaDAO.insertar(vacunaNueva);
+          cargarTabla();
+      }
+    }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
+        // TODO add your handling code here:
+        String buscar= jTextFieldCodigo.getText();
+        for (int i =0; i<jTableVacunas.getRowCount(); i++){
+            if(jTableVacunas.getValueAt(i, 0).toString().equals(buscar)){
+                jTableVacunas.setRowSelectionInterval(i, i);
+                break;
+            }
+        }
+        
+        
+    }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel)jTableVacunas.getModel();
+        
+        int filaSeleccionada= jTableVacunas.getSelectedRow();
+        
+        if(filaSeleccionada !=-1){
+            model.setValueAt(jTextFieldCodigo.getText(), filaSeleccionada, 0);
+            model.setValueAt(jTextFieldNombre.getText(), filaSeleccionada, 1);
+            model.setValueAt(jTextFieldDosis.getText(), filaSeleccionada, 2);
+            model.setValueAt(jTextFieldFabricante.getText(), filaSeleccionada, 3);
+            
+            javax.swing.JOptionPane.showMessageDialog(this, "Registro actualizado");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una fila de la tabla");
+        }
+        
+    }//GEN-LAST:event_jButtonActualizarActionPerformed
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model=(DefaultTableModel)jTableVacunas.getModel();
+        int filaSeleccionada=jTableVacunas.getSelectedRow();
+        if (filaSeleccionada !=-1){
+            model.removeRow(filaSeleccionada);
+        }
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
+
+    private void jButtonLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimpiarActionPerformed
+        // TODO add your handling code here:
+        jTextFieldCodigo.setText("");
+        jTextFieldNombre.setText("");
+        jTextFieldDosis.setText("");
+        jTextFieldFabricante.setText("");
+    }//GEN-LAST:event_jButtonLimpiarActionPerformed
 
     /**
      * @param args the command line arguments
